@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Calendar
+{% endblock %}
+
+{% block content %}
+    <div class="clearfix">
+        <a class="btn btn-info left" href="{% url 'cal:calendar' %}?{{ prev_month }}"> Previous Month </a>
+        <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ next_month }}"> Next Month </a>
+    </div>
+    <br>
+    <form action="/go_to/" method="POST">
+        {% csrf_token %}
+        Date : <input type="date" name="tdate">
+        <input type="submit" value="GO TO"/>
+    </form>
+
+    {{ calendar }}
+{% endblock %}
