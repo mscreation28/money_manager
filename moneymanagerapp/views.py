@@ -6,11 +6,11 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 import calendar
 
-from moneymanagerapp.models import Date
+from moneymanagerapp.models import Data
 from moneymanagerapp.calander import Calendar
 
 class CalendarView(generic.ListView):
-    model = Date
+    model = Data
     template_name = 'home.html'
 
     def get_context_data(self, **kwargs):
@@ -19,6 +19,7 @@ class CalendarView(generic.ListView):
         cal = Calendar(d.year, d.month)
         html_cal = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(html_cal)
+        context['today'] = datetime.today().month
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
         return context

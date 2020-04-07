@@ -1,11 +1,13 @@
 
 from django.db import models
  
-class Date(models.Model):
+class Data(models.Model):
     day = models.DateField()
     time = models.TimeField()
+    check = models.IntegerField()
+    amount = models.IntegerField()
     notes = models.TextField(blank=True, null=True)
- 
-    class Meta:
-        verbose_name = u'Scheduling'
-        verbose_name_plural = u'Scheduling'
+    
+    def __str__(self):
+        return f'{self.day} Transaction'
+

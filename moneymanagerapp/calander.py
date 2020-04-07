@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
+from moneymanagerapp.models import Data
 
 
 class Calendar(HTMLCalendar):
@@ -10,21 +11,30 @@ class Calendar(HTMLCalendar):
 
     # formats a day as a td
     # filter events by day
-    def formatday(self, day):
-        # events_per_day = events.filter(start_time__day=day)
-        # d = ''
-        # for event in events_per_day:
-        #     d += f'<li> {event.get_html_url} </li>'
+    def formatday(self, day ,data):
+        trans_per_day = data.filter(day__day=day)
+        d = ''
+        count=0
+        for data in trans_per_day:
+            if(data.check==0):
+                d += f'<li> - {data.amount}:{data.notes} </li>'
+                count-=data.amount
+            else:
+                d += f'<li> + {data.amount}:{data.notes} </li>'
+                count+=data.amount
+        if(count!=0):
+            d+= f'---------<br>'
+            d+= f'Total = {count}'
 
         if day != 0:
-            return f"<td><span class='date'>{day}</span><ul></ul></td>"
+            return f"<td><a href='add_data/'><span class='date'>{day}</span><ul>{d}</ul></a></td>"
         return '<td></td>'
 
     # formats a week as a tr
-    def formatweek(self, theweek):
+    def formatweek(self, theweek,data):
         week=''
         for d, weekday in theweek:
-            week+=self.formatday(d)
+            week+=self.formatday(d,data)
         return f'<tr> {week} </tr>'
        
 
@@ -32,10 +42,19 @@ class Calendar(HTMLCalendar):
     # filter events by year and month
     def formatmonth(self, withyear=True):
         # events = Event.objects.filter(start_time__year=self.year, start_time__month=self.month)
+        data = Data.objects.filter(day__year=self.year, day__month=self.month)
+        count=0
+        count1=0
+        for datas in data:
+            if(datas.check==0):
+                count+=datas.amount
+            else:
+                count1+=datas.amount
 
         cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
+        cal += f'Debit : {count} \t Credit : {count1} \t Total : {count1-count}'
         cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
         cal += f'{self.formatweekheader()}\n'
         for week in self.monthdays2calendar(self.year, self.month):
-            cal += f'{self.formatweek(week)}\n'
+            cal += f'{self.formatweek(week,data)}\n'
         return cal
