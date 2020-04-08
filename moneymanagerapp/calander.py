@@ -28,7 +28,7 @@ class Calendar(HTMLCalendar):
             d+= f'Total = {count}'
 
         if day != 0:
-            return f"<td><a href='add_data?day={day}'><span class='date'>{day}</span><ul>{d}</ul></a></td>"
+            return f"<td><a href='add_data?day={day}&type=0'><span class='date'>{day}</span><ul>{d}</ul></a></td>"
         return '<td></td>'
 
     # formats a week as a tr

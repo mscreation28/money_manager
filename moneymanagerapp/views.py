@@ -78,7 +78,7 @@ def add_trans(request):
     data.notes=request.POST['note']
     data.day=request.POST['adate']
     data.time=datetime.now().time()
-    if(request.POST['type']=="Income"):
+    if(request.GET['type']=='1'):
         data.check=1
     else:
         data.check=0
@@ -87,9 +87,11 @@ def add_trans(request):
     tdate=request.POST['adate']
     print(tdate)
     sdate=tdate.split('-')
-    url="/add_data?day="
+    if(request.GET['type']=='1'):
+        url="/add_data_inc?day="
+    else:
+        url="/add_data?day="
     url+=str(sdate[2])
-
     return HttpResponseRedirect(url)
 
 class AddView(generic.ListView):
@@ -112,3 +114,23 @@ class AddView(generic.ListView):
         context['next_month'] = next_month(d)
         return context
     # return render(request,'add_data.html')
+
+class Add1View(generic.ListView):
+    model = Data
+    template_name = 'add_data_inc.html'
+    # print(request.GET['day'])
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        d = get_date(self.request.session['cmonth'])
+        cal = Calendar(d.year, d.month)
+        print(d.month)
+        print(d.year)
+        add_date=datetime(d.year,d.month,int(self.request.GET['day']))
+        html_cal = cal.formatmonth(withyear=True)
+        context['calendar'] = mark_safe(html_cal)
+        context['today'] = datetime.today().month
+        context['date'] = d
+        context['add_date'] = add_date
+        context['prev_month'] = prev_month(d)
+        context['next_month'] = next_month(d)
+        return context

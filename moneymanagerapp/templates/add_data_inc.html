@@ -25,11 +25,11 @@ Calendar
             <a class="close" href="/?month={{add_date | date:'Y-m'}}">&times;</a>
             </div>
             <div class="link">
-                <a href="/add_data_inc?day={{add_date | date:'d'}}" class="link-left">Income</a>
-                <a href="" class="link-right active">Expense</a>
+                <a href="" class="link-left active">Income</a>
+                <a href="/add_data?day={{add_date | date:'d'}}" class="link-right">Expense</a>
             </div>
             <div class="content">
-                <form action="/add_trans/?type=0" method="POST">
+                <form action="/add_trans/?type=1" method="POST">
                 {% csrf_token %}
                 <p>Date : </p>
                 <input type="date" value="{{add_date | date:'Y-m-d'}}" name="adate"/>

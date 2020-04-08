@@ -137,10 +137,39 @@ a {
     color: black;
 }
 .popup .close:hover {
-    color: #6b0367;
+    color: #2dbe60;
 }
 .popup .content{
     padding: 30px 30px;
+}
+.popup .link{
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    font-size: 17px;
+    font-weight: bold;
+}
+.link-left{
+    width: 50%;
+    float: left;
+    background-color: #2dbe60;
+    color: white;    
+    
+}
+
+.link-right{
+    width: 50%;
+    color: white;
+    float: right;
+    background-color: #2dbe60;
+    /* opacity: 70%; */
+
+}
+.active{
+    background-color: #28a745;
+}
+.link a:hover{
+    background-color: #28a745;   
 }
 /* .popup input{
     margin: 20px 0px;
