@@ -22,12 +22,13 @@ class Calendar(HTMLCalendar):
             else:
                 d += f'<li> + {data.amount}:{data.notes} </li>'
                 count+=data.amount
-        if(count!=0):
+        
+        if(d!=''):
             d+= f'---------<br>'
             d+= f'Total = {count}'
 
         if day != 0:
-            return f"<td><a href='add_data/'><span class='date'>{day}</span><ul>{d}</ul></a></td>"
+            return f"<td><a href='add_data?day={day}'><span class='date'>{day}</span><ul>{d}</ul></a></td>"
         return '<td></td>'
 
     # formats a week as a tr

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Calendar
+{% endblock %}
+
+{% block content %}
+    <div class="clearfix">
+        <a class="btn btn-info left" href="{% url 'cal:calendar' %}?{{ prev_month }}"> Previous Month </a>
+        <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ next_month }}"> Next Month </a>
+    </div>
+    <br>
+    <form action="/go_to/" method="POST">
+        {% csrf_token %}
+        Date : <input type="date" name="tdate">
+        <input type="submit" value="GO TO"/>    
+    </form>
+    <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ today }}"> Today </a>
+
+    {{ calendar }}
+    <div class="overlay">
+        <div class="popup">
+            <div class="popup-head">
+                <!-- {{ request.GET.day }} -->
+            <h2>Add Data</h2>
+            <a class="close" href="/?month={{add_date | date:'Y-m'}}">&times;</a>
+            </div>
+            <div class="content">
+                <form action="/add_trans/" method="POST">
+                {% csrf_token %}
+                <p>Date : </p>
+                <input type="date" value="{{add_date | date:'Y-m-d'}}" name="adate"/>
+                <p>Amount : </p>
+                <input type="number" placeholder="Enter Amount" name="amount"/>
+                <p>Notes : </p>
+                <input type="text" placeholder="Enter Note" name="note"/>
+                <p>Type : </p>
+                <select name="type">
+                    <option>Income</option>
+                    <option>Expence</option>
+                </select>
+                <input type="submit" value="Save Changes"/>
+                </form>
+            </div>
+        </div>
+    </div>
+ 
+{% endblock %}  

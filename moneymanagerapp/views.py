@@ -15,11 +15,25 @@ class CalendarView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # d = get_date(self.request.GET.get('month', None))
+        # try:
+        #     d=get_date(self.request.session['cmonth'])
+        # except:
         d = get_date(self.request.GET.get('month', None))
+            # self.request.session['month']=self.request.GET['month']
+
+        cmonth=str(d.year)
+        cmonth+='-'
+        cmonth+=str(d.month)
+        self.request.session['cmonth']=cmonth
+
+        print(cmonth)
+        
         cal = Calendar(d.year, d.month)
         html_cal = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(html_cal)
         context['today'] = datetime.today().month
+        context['date'] = d
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
         return context
@@ -51,4 +65,50 @@ def go_to(request):
     url+=str(sdate[0])
     url+='-'
     url+=str(sdate[1])
+    cmonth=str(sdate[0])
+    cmonth+='-'
+    cmonth+=str(sdate[1])
+    print(cmonth)
+    request.session['cmonth']=cmonth
     return HttpResponseRedirect(url)
+
+def add_trans(request):
+    data=Data()
+    data.amount=request.POST['amount']
+    data.notes=request.POST['note']
+    data.day=request.POST['adate']
+    data.time=datetime.now().time()
+    if(request.POST['type']=="Income"):
+        data.check=1
+    else:
+        data.check=0
+    data.save()
+
+    tdate=request.POST['adate']
+    print(tdate)
+    sdate=tdate.split('-')
+    url="/add_data?day="
+    url+=str(sdate[2])
+
+    return HttpResponseRedirect(url)
+
+class AddView(generic.ListView):
+    model = Data
+    template_name = 'add_data.html'
+    # print(request.GET['day'])
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        d = get_date(self.request.session['cmonth'])
+        cal = Calendar(d.year, d.month)
+        print(d.month)
+        print(d.year)
+        add_date=datetime(d.year,d.month,int(self.request.GET['day']))
+        html_cal = cal.formatmonth(withyear=True)
+        context['calendar'] = mark_safe(html_cal)
+        context['today'] = datetime.today().month
+        context['date'] = d
+        context['add_date'] = add_date
+        context['prev_month'] = prev_month(d)
+        context['next_month'] = next_month(d)
+        return context
+    # return render(request,'add_data.html')
