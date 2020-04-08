@@ -148,22 +148,30 @@ a {
     line-height: 50px;
     font-size: 17px;
     font-weight: bold;
+    margin-bottom: 30px;
 }
 .link-left{
-    width: 50%;
+    width: 33.25%;
     float: left;
     background-color: #2dbe60;
     color: white;    
     
 }
-
+.content p{
+    display: inline;
+    line-height: 10px;
+    padding-bottom: 10px;
+}
+.content a{
+    width: 15%;
+    float: right;
+}
 .link-right{
-    width: 50%;
+    width: 33.5%;
     color: white;
     float: right;
     background-color: #2dbe60;
     /* opacity: 70%; */
-
 }
 .active{
     background-color: #28a745;
@@ -171,16 +179,18 @@ a {
 .link a:hover{
     background-color: #28a745;   
 }
-/* .popup input{
-    margin: 20px 0px;
-    width: 100%;
+
+.popup input, select{
+    margin: 5px 0px;
+    /* width: 100%; */
+    /* float: right; */
     font-weight: bold;
     padding: 0 15px;
     font-size: 17px;
-    height: 50px;
+    height: 30px;
     border-radius: 4px;
 }
-.popup input[type="text"], input[type="date"], input[type="password"], input[type="file"]
+.popup input[type="text"], input[type="date"], input[type="number"],select, option
 {
     color: gray;
     background-color: white;
@@ -188,18 +198,15 @@ a {
     font-weight: lighter;
     border: 0.5px solid lightgray;
 }
-.popup input[type="file"]
-{
-    padding:10px;
-}
+
 .popup input[type="submit"]
 {
     color: white;
-    background-color: #6b0367;
+    background-color: #2dbe60;
     border: none;
     box-shadow: 0 0 3px gray;
 }
 .popup input[type="submit"]:hover
 {
     opacity: 0.8;
-}  */
+} 

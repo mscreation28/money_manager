@@ -5,9 +5,11 @@ from django.views import generic
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 import calendar
-
+from matplotlib import pyplot as plt
 from moneymanagerapp.models import Data
 from moneymanagerapp.calander import Calendar
+import PIL, PIL.Image, io
+
 
 class CalendarView(generic.ListView):
     model = Data
@@ -15,20 +17,13 @@ class CalendarView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # d = get_date(self.request.GET.get('month', None))
-        # try:
-        #     d=get_date(self.request.session['cmonth'])
-        # except:
         d = get_date(self.request.GET.get('month', None))
-            # self.request.session['month']=self.request.GET['month']
 
         cmonth=str(d.year)
         cmonth+='-'
         cmonth+=str(d.month)
         self.request.session['cmonth']=cmonth
 
-        print(cmonth)
-        
         cal = Calendar(d.year, d.month)
         html_cal = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(html_cal)
@@ -36,7 +31,74 @@ class CalendarView(generic.ListView):
         context['date'] = d
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
+
+        # data=Data.objects.filter(day__month=d.month)
+
+        # x=[get_cFood(data),get_cEducation(data),get_cTransport(data),get_cOther(data)]   
+        # labels=["Food","Education","Transport","Other"]
+        # plt.pie(x,labels=labels,autopct='%1.1f%%')
+        # plt.legend()
+        # plt.savefig("fig.png")
+        # plt.close()
+        
         return context
+
+
+def get_cFood(data):
+    cFood=0
+    for datas in data:
+        if(datas.etype=="Food"):
+            cFood+=datas.amount
+    return cFood
+
+def get_cEducation(data):
+    cEducation=0
+    for datas in data:    
+        if(datas.etype=="Education"):
+            cEducation+=datas.amount
+    return cEducation
+
+def get_cTransport(data):
+    cTransport=0
+    for datas in data:
+        if(datas.etype=="Transport"):
+            cTransport+=datas.amount
+    return cTransport
+
+def get_cOther(data):
+    cOther=0
+    for datas in data:
+        if(datas.etype=="Other"):
+            cOther+=datas.amount
+    return cOther
+
+def get_cCard(data):
+    cCard=0
+    for datas in data:
+        if(datas.etype=="Card"):
+            cCard+=datas.amount
+    return cCard
+
+def get_cCash(data):
+    cCash=0
+    for datas in data:        
+        if(datas.etype=="Cash"):
+            cCash+=datas.amount
+    return cCash
+
+def get_cSalary(data):
+    cSalary=0
+    for datas in data:            
+        if(datas.etype=="Salary"):
+            cSalary+=datas.amount
+    return cSalary
+
+def get_cOthers(data):
+    cOthers=0
+    for datas in data:            
+        if(datas.etype=="Others"):
+            cOthers+=datas.amount
+    return cOthers
 
 def get_date(req_month):
     if req_month:
@@ -77,6 +139,7 @@ def add_trans(request):
     data.amount=request.POST['amount']
     data.notes=request.POST['note']
     data.day=request.POST['adate']
+    data.etype=request.POST['etype']
     data.time=datetime.now().time()
     if(request.GET['type']=='1'):
         data.check=1
@@ -87,10 +150,7 @@ def add_trans(request):
     tdate=request.POST['adate']
     print(tdate)
     sdate=tdate.split('-')
-    if(request.GET['type']=='1'):
-        url="/add_data_inc?day="
-    else:
-        url="/add_data?day="
+    url="/show_data?day="
     url+=str(sdate[2])
     return HttpResponseRedirect(url)
 
@@ -102,8 +162,7 @@ class AddView(generic.ListView):
         context = super().get_context_data(**kwargs)
         d = get_date(self.request.session['cmonth'])
         cal = Calendar(d.year, d.month)
-        print(d.month)
-        print(d.year)
+
         add_date=datetime(d.year,d.month,int(self.request.GET['day']))
         html_cal = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(html_cal)
@@ -123,8 +182,7 @@ class Add1View(generic.ListView):
         context = super().get_context_data(**kwargs)
         d = get_date(self.request.session['cmonth'])
         cal = Calendar(d.year, d.month)
-        print(d.month)
-        print(d.year)
+
         add_date=datetime(d.year,d.month,int(self.request.GET['day']))
         html_cal = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(html_cal)
@@ -134,3 +192,64 @@ class Add1View(generic.ListView):
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
         return context
+
+class ShowView(generic.ListView):
+    model = Data
+    template_name = 'show_data.html'
+    # print(request.GET['day'])
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        d = get_date(self.request.session['cmonth'])
+        cal = Calendar(d.year, d.month)
+
+        add_date=datetime(d.year,d.month,int(self.request.GET['day']))
+        html_cal = cal.formatmonth(withyear=True)
+        context['calendar'] = mark_safe(html_cal)
+        context['data']=Data.objects.filter(day=add_date)
+        context['add_date'] = add_date
+        return context
+
+def delete_data(request):
+    did=int(request.GET['id'])
+    instance = Data.objects.get(id=did)
+    instance.delete()
+    url="/show_data?day="
+    url+=request.GET['day']
+    return HttpResponseRedirect(url)
+
+class EditView(generic.ListView):
+    model = Data
+    template_name = 'edit_data.html'
+    # print(request.GET['day'])
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        d = get_date(self.request.session['cmonth'])
+        cal = Calendar(d.year, d.month)
+
+        eid=int(self.request.GET['id'])
+        instance = Data.objects.get(id=eid)
+
+        add_date=datetime(d.year,d.month,int(self.request.GET['day']))
+        html_cal = cal.formatmonth(withyear=True)
+        context['calendar'] = mark_safe(html_cal)
+        context['data']=Data.objects.filter(day=add_date)
+        context['flag']=1
+        context['instance']=instance
+        print(instance)
+        context['add_date'] = add_date
+        return context
+
+def edit_data_db(request):
+    did=int(request.GET['id'])
+    instance = Data.objects.get(id=did)
+
+    instance.amount=request.POST['amount']
+    instance.notes=request.POST['note']
+    instance.day=request.POST['adate']
+    instance.etype=request.POST['etype']
+    instance.save()
+
+    url="/show_data?day="
+    url+=request.GET['day']
+    return HttpResponseRedirect(url)
+

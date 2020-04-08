@@ -25,6 +25,7 @@ Calendar
             <a class="close" href="/?month={{add_date | date:'Y-m'}}">&times;</a>
             </div>
             <div class="link">
+                <a href="/show_data?day={{add_date | date:'d'}}" class="link-left">Details</a>
                 <a href="/add_data_inc?day={{add_date | date:'d'}}" class="link-left">Income</a>
                 <a href="" class="link-right active">Expense</a>
             </div>
@@ -32,12 +33,19 @@ Calendar
                 <form action="/add_trans/?type=0" method="POST">
                 {% csrf_token %}
                 <p>Date : </p>
-                <input type="date" value="{{add_date | date:'Y-m-d'}}" name="adate"/>
+                <input type="date" value="{{add_date | date:'Y-m-d'}}" name="adate"/><br>
                 <p>Amount : </p>
-                <input type="number" placeholder="Enter Amount" name="amount"/>
-                <p>Notes : </p>
-                <input type="text" placeholder="Enter Note" name="note"/>
-                <input type="submit" value="Save Changes"/>
+                <input type="number" placeholder="Enter Amount" name="amount"/><br>  
+                <p>Type : </p>              
+                <select name="etype">
+                    <option>Other</option>
+                    <option>Food</option>
+                    <option>Education</option>
+                    <option>Transport</option>                    
+                </select><br>
+                <p>Notes :</p>
+                <input type="text" placeholder="Enter Note" name="note"/><br>
+                <input type="submit" value="Save"/>
                 </form>
             </div>
         </div>

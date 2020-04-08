@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Calendar
+{% endblock %}
+
+{% block content %}
+    <div class="clearfix">
+        <a class="btn btn-info left" href="{% url 'cal:calendar' %}?{{ prev_month }}"> Previous Month </a>
+        <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ next_month }}"> Next Month </a>
+    </div>
+    <br>
+    <form action="/go_to/" method="POST">
+        {% csrf_token %}
+        Date : <input type="date" name="tdate">
+        <input type="submit" value="GO TO"/>    
+    </form>
+    <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ today }}"> Today </a>
+    {{ calendar }}
+    <div class="overlay">
+        <div class="popup">
+            <div class="popup-head">
+                <!-- {{ request.GET.day }} -->
+            <h2>Details</h2>
+            <a class="close" href="/?month={{add_date | date:'Y-m'}}">&times;</a>
+            </div>
+            <div class="link">
+                <a href="" class="link-left active">Details</a>
+                <a href="/add_data_inc?day={{add_date | date:'d'}}" class="link-left">Income</a>
+                <a href="/add_data_inc?day={{add_date | date:'d'}}" class="link-right">Expense</a>
+            </div>
+            <div class="content">
+                <h3>Income :</h3>
+                {% for datas in data %}
+                    
+                    {% if datas.check == 1  %}                        
+                        <p> {{ datas.amount }} : {{ datas.etype }} - {{ datas.notes }}</p>                        
+                        <a href="/delete_data?day={{add_date | date:'d'}}&id={{ datas.id }}"> Delete </a>
+                        <a href="/edit_data?day={{add_date | date:'d'}}&id={{ datas.id }}"> Edit </a>
+                        <br>
+                    {% endif %}
+                    
+                {% endfor %}
+                <h3>Expense :</h3>
+                {% for datas in data %}
+                    {% if datas.check == 0 %}
+                    <p> {{ datas.amount }} : {{ datas.etype }} - {{ datas.notes }}</p>                     
+                        <a href="/delete_data?day={{add_date | date:'d'}}&id={{ datas.id }}"> Delete </a>
+                        <a href="/edit_data?day={{add_date | date:'d'}}&id={{ datas.id }}"> Edit </a>
+                        <br>
+                    {% endif %}
+                    
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+ 
+{% endblock %}  
