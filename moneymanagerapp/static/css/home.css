@@ -155,7 +155,7 @@ a {
     color: black;
 }
 .popup .close:hover {
-    color: #2dbe60;
+    color: rgba(193, 253, 181);
 }
 .popup .content{
     padding: 30px 30px;

@@ -40,7 +40,7 @@ class CalendarView(generic.ListView):
         plt.pie(x,labels=labels,autopct='%1.1f%%')
         plt.title("Expense", fontsize=20)
         plt.legend()
-        plt.savefig('moneymanagerapp/static/img/fig.png')
+        plt.savefig('static/img/fig.png')
         plt.close()
 
         x=[get_cCash(data),get_cCard(data),get_cSalary(data),get_cOthers(data)]   
@@ -48,7 +48,7 @@ class CalendarView(generic.ListView):
         plt.pie(x,labels=labels,autopct='%1.1f%%')
         plt.title("Income", fontsize=20)
         plt.legend()
-        plt.savefig('moneymanagerapp/static/img/fig1.png')
+        plt.savefig('static/img/fig1.png')
         plt.close()
 
         context['expense']=get_expense(data)
@@ -279,7 +279,7 @@ class EditView(generic.ListView):
         context['data']=Data.objects.filter(day=add_date)
         context['flag']=1
         context['instance']=instance
-        print(instance)
+        # print(instance)
         context['add_date'] = add_date
         
         data=Data.objects.filter(day__month=d.month)
