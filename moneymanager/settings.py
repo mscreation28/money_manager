@@ -25,7 +25,7 @@ SECRET_KEY = '&%idp+q+t1=skf!&^@7_z&a&jmqp+cz^q526_7g7tldco9-#w9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['community.pythonanywhere.com','127.0.0.1']
+ALLOWED_HOSTS = ['mscreation028.pythonanywhere.com','127.0.0.1']
 
 
 # Application definition
