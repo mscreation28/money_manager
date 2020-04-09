@@ -48,7 +48,7 @@ class CalendarView(generic.ListView):
         plt.pie(x,labels=labels,autopct='%1.1f%%')
         plt.title("Income", fontsize=20)
         plt.legend()
-        plt.savefig('moneymanagerapp/static/img/fig1.png')
+        plt.savefig('static/img/fig1.png')
         plt.close()
 
         context['expense']=get_expense(data)
