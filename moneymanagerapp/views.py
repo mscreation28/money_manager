@@ -40,7 +40,7 @@ class CalendarView(generic.ListView):
         plt.pie(x,labels=labels,autopct='%1.1f%%')
         plt.title("Expense", fontsize=20)
         plt.legend()
-        plt.savefig('moneymanagerapp/static/img/fig.png')
+        plt.savefig('static/img/fig.png')
         plt.close()
 
         x=[get_cCash(data),get_cCard(data),get_cSalary(data),get_cOthers(data)]   
