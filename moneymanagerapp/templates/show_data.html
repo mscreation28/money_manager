@@ -3,20 +3,39 @@
 {% block title %}
 Calendar
 {% endblock %}
-
+{% load static %}
 {% block content %}
-    <div class="clearfix">
-        <a class="btn btn-info left" href="{% url 'cal:calendar' %}?{{ prev_month }}"> Previous Month </a>
-        <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ next_month }}"> Next Month </a>
+    <div class="content-right">
+        <div class="head">
+                <p></p><h3>Income : </h3>{{ income }}</p>
+                <p><h3>Expense : </h3>{{ expense }}</p>
+                <p><h3>Available : </h3>{{ available }}</p>
+            <br>
+        </div>
+    
+        <img src="{% static 'img/fig.png' %}">
+        <img src="{% static 'img/fig1.png' %}">
     </div>
-    <br>
-    <form action="/go_to/" method="POST">
-        {% csrf_token %}
-        Date : <input type="date" name="tdate">
-        <input type="submit" value="GO TO"/>    
-    </form>
-    <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ today }}"> Today </a>
-    {{ calendar }}
+    <div class="content-left">
+        <div class="content-calhead">
+            <a class="btn " href="{% url 'cal:calendar' %}?{{ prev_month }}"> Previous Month </a>
+            <a class="btn " href="{% url 'cal:calendar' %}?{{ today }}"> Today </a>
+            <a class="btn " href="{% url 'cal:calendar' %}?{{ next_month }}"> Next Month </a>
+        </div>
+        <div class="content-cal">
+            {{ calendar }}
+        </div>
+        <br>
+        <div class="bot">
+            <form action="/go_to/" method="POST">
+                {% csrf_token %}
+                <p>Date : </p><input type="date" name="tdate">
+                <input class="btn" type="submit" value="GO TO" />    
+            </form>
+            <!-- <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ today }}"> Today </a> -->
+        </div>
+    </div>
+
     <div class="overlay">
         <div class="popup">
             <div class="popup-head">
@@ -27,27 +46,28 @@ Calendar
             <div class="link">
                 <a href="" class="link-left active">Details</a>
                 <a href="/add_data_inc?day={{add_date | date:'d'}}" class="link-left">Income</a>
-                <a href="/add_data_inc?day={{add_date | date:'d'}}" class="link-right">Expense</a>
+                <a href="/add_data?day={{add_date | date:'d'}}" class="link-right">Expense</a>
             </div>
-            <div class="content">
+            <div class="content-show">
+                <h4>Date : {{add_date | date:'d-m-Y'}}</h4>
                 <h3>Income :</h3>
                 {% for datas in data %}
                     
                     {% if datas.check == 1  %}                        
-                        <p> {{ datas.amount }} : {{ datas.etype }} - {{ datas.notes }}</p>                        
+                        <p> {{ datas.amount }} : {{ datas.etype }} - {{ datas.notes }}                    
                         <a href="/delete_data?day={{add_date | date:'d'}}&id={{ datas.id }}"> Delete </a>
-                        <a href="/edit_data?day={{add_date | date:'d'}}&id={{ datas.id }}"> Edit </a>
-                        <br>
+                        <a href="/edit_data?day={{add_date | date:'d'}}&id={{ datas.id }}"> Edit </a></p>
+                        
                     {% endif %}
                     
                 {% endfor %}
                 <h3>Expense :</h3>
                 {% for datas in data %}
                     {% if datas.check == 0 %}
-                    <p> {{ datas.amount }} : {{ datas.etype }} - {{ datas.notes }}</p>                     
+                    <p> {{ datas.amount }} : {{ datas.etype }} - {{ datas.notes }}                    
                         <a href="/delete_data?day={{add_date | date:'d'}}&id={{ datas.id }}"> Delete </a>
-                        <a href="/edit_data?day={{add_date | date:'d'}}&id={{ datas.id }}"> Edit </a>
-                        <br>
+                        <a href="/edit_data?day={{add_date | date:'d'}}&id={{ datas.id }}"> Edit </a></p>
+                        
                     {% endif %}
                     
                 {% endfor %}

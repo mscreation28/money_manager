@@ -5,11 +5,12 @@ from django.views import generic
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 import calendar
-from matplotlib import pyplot as plt
+from django.conf import settings
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 from moneymanagerapp.models import Data
 from moneymanagerapp.calander import Calendar
-import PIL, PIL.Image, io
-
 
 class CalendarView(generic.ListView):
     model = Data
@@ -32,17 +33,43 @@ class CalendarView(generic.ListView):
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
 
-        # data=Data.objects.filter(day__month=d.month)
+        data=Data.objects.filter(day__month=d.month)
 
-        # x=[get_cFood(data),get_cEducation(data),get_cTransport(data),get_cOther(data)]   
-        # labels=["Food","Education","Transport","Other"]
-        # plt.pie(x,labels=labels,autopct='%1.1f%%')
-        # plt.legend()
-        # plt.savefig("fig.png")
-        # plt.close()
+        x=[get_cFood(data),get_cEducation(data),get_cTransport(data),get_cOther(data)]   
+        labels=["Food","Education","Transport","Other"]
+        plt.pie(x,labels=labels,autopct='%1.1f%%')
+        plt.title("Expense", fontsize=20)
+        plt.legend()
+        plt.savefig('moneymanagerapp/static/img/fig.png')
+        plt.close()
+
+        x=[get_cCash(data),get_cCard(data),get_cSalary(data),get_cOthers(data)]   
+        labels=["Cash","Card","Salary","Other"]
+        plt.pie(x,labels=labels,autopct='%1.1f%%')
+        plt.title("Income", fontsize=20)
+        plt.legend()
+        plt.savefig('moneymanagerapp/static/img/fig1.png')
+        plt.close()
+
+        context['expense']=get_expense(data)
+        context['income']=get_income(data)
+        context['available']=get_income(data)-get_expense(data)
         
         return context
 
+def get_expense(data):
+    ex=0
+    for datas in data:
+        if(datas.check==0):
+            ex+=datas.amount
+    return ex
+
+def get_income(data):
+    ic=0
+    for datas in data:
+        if(datas.check==1):
+            ic+=datas.amount
+    return ic
 
 def get_cFood(data):
     cFood=0
@@ -171,6 +198,11 @@ class AddView(generic.ListView):
         context['add_date'] = add_date
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
+
+        data=Data.objects.filter(day__month=d.month)
+        context['expense']=get_expense(data)
+        context['income']=get_income(data)
+        context['available']=get_income(data)-get_expense(data)
         return context
     # return render(request,'add_data.html')
 
@@ -191,6 +223,12 @@ class Add1View(generic.ListView):
         context['add_date'] = add_date
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
+
+        data=Data.objects.filter(day__month=d.month)
+        context['expense']=get_expense(data)
+        context['income']=get_income(data)
+        context['available']=get_income(data)-get_expense(data)
+        
         return context
 
 class ShowView(generic.ListView):
@@ -207,6 +245,12 @@ class ShowView(generic.ListView):
         context['calendar'] = mark_safe(html_cal)
         context['data']=Data.objects.filter(day=add_date)
         context['add_date'] = add_date
+        
+        data=Data.objects.filter(day__month=d.month)
+        context['expense']=get_expense(data)
+        context['income']=get_income(data)
+        context['available']=get_income(data)-get_expense(data)
+        
         return context
 
 def delete_data(request):
@@ -237,6 +281,12 @@ class EditView(generic.ListView):
         context['instance']=instance
         print(instance)
         context['add_date'] = add_date
+        
+        data=Data.objects.filter(day__month=d.month)
+        context['expense']=get_expense(data)
+        context['income']=get_income(data)
+        context['available']=get_income(data)-get_expense(data)
+        
         return context
 
 def edit_data_db(request):

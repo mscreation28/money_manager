@@ -15,20 +15,28 @@ class Calendar(HTMLCalendar):
         trans_per_day = data.filter(day__day=day)
         d = ''
         count=0
+        count1=0
         for data in trans_per_day:
             if(data.check==0):
-                d += f'<li> - {data.amount}:{data.notes} </li>'
-                count-=data.amount
-            else:
-                d += f'<li> + {data.amount}:{data.notes} </li>'
                 count+=data.amount
+            else:                
+                count1+=data.amount
         
-        if(d!=''):
-            d+= f'---------<br>'
-            d+= f'Total = {count}'
+        if(count1!=0):
+            d+= f'<li class="green">{count1}</li>'
+        else:
+            d+= f'<li></li>'
+        if(count!=0):
+            d+= f'<li class="red">{count}</li>'
+        else:
+            d+= f'<li></li>'
+        if(count1!=0 and count!=0):
+            d+= f'<li class="blue">{count1-count}</li>'
+        else:
+            d+= f'<li></li>'
 
         if day != 0:
-            return f"<td><a href='show_data?day={day}&type=0'><span class='date'>{day}</span><ul>{d}</ul></a></td>"
+            return f"<td><a href='show_data?day={day}'><span class='date'>{day}</span><ul>{d}</ul></a></td>"
         return '<td></td>'
 
     # formats a week as a tr
@@ -53,9 +61,12 @@ class Calendar(HTMLCalendar):
                 count1+=datas.amount
 
         cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
-        cal += f'Debit : {count} \t Credit : {count1} \t Total : {count1-count}'
+        cal += '<div class="cal-header">'
         cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
+        cal += '</div>'
         cal += f'{self.formatweekheader()}\n'
         for week in self.monthdays2calendar(self.year, self.month):
             cal += f'{self.formatweek(week,data)}\n'
+        cal += '</table>'
+        
         return cal

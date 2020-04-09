@@ -1,27 +1,39 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Calendar
+Monney Manager
 {% endblock %}
-
+{% load static %}
 {% block content %}
-    <div class="clearfix">
-        <a class="btn btn-info left" href="{% url 'cal:calendar' %}?{{ prev_month }}"> Previous Month </a>
-        <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ next_month }}"> Next Month </a>
+     
+    <div class="content-right">
+        <div class="head">
+                <p></p><h3>Income : </h3>{{ income }}</p>
+                <p><h3>Expense : </h3>{{ expense }}</p>
+                <p><h3>Available : </h3>{{ available }}</p>
+            <br>
+        </div>
+    
+        <img src="{% static 'img/fig.png' %}">
+        <img src="{% static 'img/fig1.png' %}">
     </div>
-    <br>
-    <form action="/go_to/" method="POST">
-        {% csrf_token %}
-        Date : <input type="date" name="tdate">
-        <input type="submit" value="GO TO"/>    
-    </form>
-    <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ today }}"> Today </a>
-
-    {{ calendar }}
-
-    {{ chart }}
-
-    Food: {{cFood}}
-    Cash: {{cCash}}
-
+    <div class="content-left">
+        <div class="content-calhead">
+            <a class="btn " href="{% url 'cal:calendar' %}?{{ prev_month }}"> Previous Month </a>
+            <a class="btn " href="{% url 'cal:calendar' %}?{{ today }}"> Today </a>
+            <a class="btn " href="{% url 'cal:calendar' %}?{{ next_month }}"> Next Month </a>
+        </div>
+        <div class="content-cal">
+            {{ calendar }}
+        </div>
+        <br>
+        <div class="bot">
+            <form action="/go_to/" method="POST">
+                {% csrf_token %}
+                <p>Date : </p><input type="date" name="tdate">
+                <input class="btn" type="submit" value="GO TO" />    
+            </form>
+            <!-- <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ today }}"> Today </a> -->
+        </div>
+    </div>
 {% endblock %}  
