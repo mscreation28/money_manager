@@ -40,7 +40,7 @@ class CalendarView(generic.ListView):
         plt.pie(x,labels=labels,autopct='%1.1f%%')
         plt.title("Expense", fontsize=20)
         plt.legend()
-        plt.savefig('home/mscreation028/mscreation028.pythonanywhere.com/static/img/fig.png')
+        plt.savefig('/home/mscreation028/mscreation028.pythonanywhere.com/static/img/fig.png')
         plt.close()
 
         x=[get_cCash(data),get_cCard(data),get_cSalary(data),get_cOthers(data)]   
@@ -48,7 +48,7 @@ class CalendarView(generic.ListView):
         plt.pie(x,labels=labels,autopct='%1.1f%%')
         plt.title("Income", fontsize=20)
         plt.legend()
-        plt.savefig('home/mscreation028/mscreation028.pythonanywhere.com/static/img/fig1.png')
+        plt.savefig('/home/mscreation028/mscreation028.pythonanywhere.com/static/img/fig1.png')
         plt.close()
 
         context['expense']=get_expense(data)
