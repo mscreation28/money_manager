@@ -294,11 +294,14 @@ img{
     /* width: 50%; */
     float: left;
     /* margin-top: 20px; */
+    
     margin-left: 30px;
     padding-top: 0;
 }
 .content-calhead{
-    margin: 20px 0px;
+    margin: 5% 0px;
+    text-align: center;
+    width: 100%;
 }
 .head{
     
