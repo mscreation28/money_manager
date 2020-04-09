@@ -1,27 +1,15 @@
 body {
     font-family: "ptsans", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-  
-.left {
-    float: left;
-}
-  
-.right {
-    float: right;
-}
 
-.clearfix {
-    margin: 15px;
-    width: 40%;
-    float: left;
-    margin-top: 50px;
-}
 .btn{
-    border: 1px solid #28a745;
+    /* border: 1px solid #28a745; */
+    box-shadow: 0 0 1px gray;
     background-color: rgba(193, 253, 181,0.6);
     border-radius: 5px;
     padding: 5px 10px;
-    margin: 2%;
+    margin: 2% 1%;
+    /* margin-bottom: 0px; */
     width: 20%;
 }
 .btn:hover{
@@ -259,10 +247,13 @@ a {
 } 
 img{
     /* float: right; */
-    height: 100;
-    width: 55%;
+    /* height: 100; */
+    /* clip-path: inset(0,50px,20px,80px); */
+    width: 50%;
+    height: auto;
     margin: 0;
     margin-left: -7%;
+    padding-left: -7%;
     /* background-color: aquamarine; */
 }
 .content-left{
@@ -279,12 +270,12 @@ img{
     text-align: center;
     /* background-color: #2dbe60; */
 }
-.content-right h3{
+.content-right h3, .head h3{
     
     display: inline;
     line-height: 40px;
 }
-.content-right p{
+.content-right p, .head p{
     /* padding-top: 50px; */
     padding: 0px 15px;
     display: inline;
@@ -298,30 +289,33 @@ img{
     margin-left: 30px;
     padding-top: 0;
 }
-.content-calhead{
-    margin: 5% 0px;
-    /* text-align: center; */
+.content-calhead{    
     width: 100%;
+    /* margin-bottom: 10px; */
+    min-height: 30px;
 }
 .head{
     
     /* width: 80%; */
-    margin: 30px 30px;
-    height: 50px;
-    /* vertical-align: c; */
+    margin: 10px 30px;
+    margin-bottom: 20px;
+    min-height: 45px;
+    text-align: center;
     /* margin-top: 30px; */
-    padding-top: 10px;
+    padding-top: 5px;
     border-radius: 5px;
     background-color: rgba(189, 250, 229, 0.6);  
 }
 .bot{
     margin-top: 20px;
+    min-height: 30px;
 }
 .bot input[type="submit"]{
     box-sizing: border-box;
     border: 1px solid white;
     background-color: rgba(189, 250, 229, 0.6);  
-    margin: 20px;  
+    margin: 20px; 
+    width: 75px; 
     font-size: 17px;
     box-shadow: 0 0 2px gray;
     /* margin-top: 0; */
@@ -349,4 +343,23 @@ img{
 }
 .blue{
     color: blue;
+}
+
+@media(max-width:768px){
+    .content-cal,
+    .calendar,
+    .content-show a,
+    .content-left,
+    .content-right{
+        float: none;
+        text-align: center;
+        width: 100%;
+        margin-left: 0;
+    }
+    img{
+        width: 100%;
+    }
+    .bot{
+        margin: 0;
+    }
 }
