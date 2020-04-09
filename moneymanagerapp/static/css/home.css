@@ -21,7 +21,8 @@ body {
     background-color: rgba(193, 253, 181,0.6);
     border-radius: 5px;
     padding: 5px 10px;
-    margin: 20px;
+    margin: 2%;
+    width: 20%;
 }
 .btn:hover{
     background-color: rgba(193, 253, 181);
