@@ -5,16 +5,10 @@ Calendar
 {% endblock %}
 {% load static %}
 {% block content %}
-   <div class="content-right">
-        <div class="head">
-                <p></p><h3>Income : </h3>{{ income }}</p>
-                <p><h3>Expense : </h3>{{ expense }}</p>
-                <p><h3>Available : </h3>{{ available }}</p>
-            <br>
-        </div>
-    
-        <img src="{% static 'img/fig.png' %}">
-        <img src="{% static 'img/fig1.png' %}">
+   <div class="head">
+        <p><h3>Income : </h3>{{ income }}</p>
+        <p><h3>Expense : </h3>{{ expense }}</p>
+        <p><h3>Available : </h3>{{ available }}</p>
     </div>
     <div class="content-left">
         <div class="content-calhead">
@@ -34,6 +28,10 @@ Calendar
             </form>
             <!-- <a class="btn btn-info right" href="{% url 'cal:calendar' %}?{{ today }}"> Today </a> -->
         </div>
+    </div>
+    <div class="content-right">
+        <img src="{% static 'img/fig.png' %}">
+        <img src="{% static 'img/fig1.png' %}">
     </div>
     <div class="overlay">
         <div class="popup">
