@@ -162,7 +162,7 @@ def go_to(request):
     tdate=request.POST['tdate']
     print(tdate)
     sdate=tdate.split('-')
-    url='/?month='
+    url='/home/?month='
     url+=str(sdate[0])
     url+='-'
     url+=str(sdate[1])
