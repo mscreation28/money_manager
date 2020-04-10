@@ -58,7 +58,7 @@ class CalendarView(generic.ListView):
         plt.title("Income", fontsize=20)
         plt.legend()
         # plt.savefig('moneymanagerapp/static/img/fig1.png')
-        plt.savefig('/home/mscreation028/mscreation028.pythonanywhere.com/static/img/fig1.png')
+        plt.savefig('/home/mscreation028/mscreation028/pythonanywhere.com/static/img/fig1.png')
         plt.close()
 
         context['expense']=get_expense(data)

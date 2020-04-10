@@ -4,8 +4,12 @@
 {% load static %}
 {% block content %}
 
-    <h1 class="title">Monney Manager</h1>
-    <hr>
+    <div class="header">
+        <div class="header-logo">  <h1>Money Manager</h1></div> 
+        <div class="header-btn">
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
    <div class="head">
         <p><h3>Income : </h3>{{ income }}</p>
         <p><h3>Expense : </h3>{{ expense }}</p>
