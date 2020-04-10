@@ -298,7 +298,7 @@ img{
     /* width: 80%; */
     margin: 10px 30px;
     margin-bottom: 20px;
-    /* min-height: 45px; */
+    min-height: 45px;
     text-align: center;
     /* margin-top: 30px; */
     padding-top: 5px;
@@ -374,8 +374,28 @@ img{
     .head{
         margin: 0;
         margin-bottom: 20px;
+        padding: 0;
+    }
+    .head p{
+        padding: 5px;
+        margin: 0px 10px;
     }
     .popup{
         width: 350px;
+        padding: 0;
+        margin: 0;
+    }
+    .content-show{
+        padding:2px;
+        margin: 0;
+    }
+    .content-show p{
+        margin-left: 0px;
+    }
+}
+@media(max-width:380px){
+    .head p{
+        padding: 5px;
+        margin: 0px 0px;
     }
 }

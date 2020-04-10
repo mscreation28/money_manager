@@ -33,14 +33,14 @@ class CalendarView(generic.ListView):
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
 
-        data=Data.objects.filter(day__month=d.month)
+        data=Data.objects.filter(day__month=d.month, day__year=d.year)
 
         x=[get_cFood(data),get_cEducation(data),get_cTransport(data),get_cOther(data)]   
         labels=["Food","Education","Transport","Other"]
         plt.pie(x,labels=labels,autopct='%1.1f%%')
         plt.title("Expense", fontsize=20)
         plt.legend()
-        plt.savefig('/home/mscreation028/mscreation028.pythonanywhere.com/static/img/fig.png')
+        plt.savefig('moneymanagerapp/static/img/fig.png')
         plt.close()
 
         x=[get_cCash(data),get_cCard(data),get_cSalary(data),get_cOthers(data)]   
@@ -48,7 +48,7 @@ class CalendarView(generic.ListView):
         plt.pie(x,labels=labels,autopct='%1.1f%%')
         plt.title("Income", fontsize=20)
         plt.legend()
-        plt.savefig('/home/mscreation028/mscreation028.pythonanywhere.com/static/img/fig1.png')
+        plt.savefig('moneymanagerapp/static/img/fig1.png')
         plt.close()
 
         context['expense']=get_expense(data)
@@ -199,7 +199,7 @@ class AddView(generic.ListView):
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
 
-        data=Data.objects.filter(day__month=d.month)
+        data=Data.objects.filter(day__month=d.month, day__year=d.year)
         context['expense']=get_expense(data)
         context['income']=get_income(data)
         context['available']=get_income(data)-get_expense(data)
@@ -224,7 +224,7 @@ class Add1View(generic.ListView):
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
 
-        data=Data.objects.filter(day__month=d.month)
+        data=Data.objects.filter(day__month=d.month, day__year=d.year)
         context['expense']=get_expense(data)
         context['income']=get_income(data)
         context['available']=get_income(data)-get_expense(data)
@@ -246,7 +246,7 @@ class ShowView(generic.ListView):
         context['data']=Data.objects.filter(day=add_date)
         context['add_date'] = add_date
         
-        data=Data.objects.filter(day__month=d.month)
+        data=Data.objects.filter(day__month=d.month, day__year=d.year)
         context['expense']=get_expense(data)
         context['income']=get_income(data)
         context['available']=get_income(data)-get_expense(data)
@@ -282,7 +282,7 @@ class EditView(generic.ListView):
         # print(instance)
         context['add_date'] = add_date
         
-        data=Data.objects.filter(day__month=d.month)
+        data=Data.objects.filter(day__month=d.month, day__year=d.year)
         context['expense']=get_expense(data)
         context['income']=get_income(data)
         context['available']=get_income(data)-get_expense(data)
