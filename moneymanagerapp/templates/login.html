@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Calendar
+{% endblock %}
+{% load static %}
+{% block content %}
+
+    <div class="login-box">
+        <h1>Log In</h1>
+        {% if messages %}
+            <div class="message">
+            {% for message in messages %}
+                {% if message.level == 25 %}
+                    <div class="success">
+                        {{ message }}
+                    </div>
+                {% endif %}
+                {% if message.level == 30 %}
+                    <div class="warning">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+        {% endif %}
+        <form action="/auth/" method="POST">
+            {% csrf_token %} 
+            <p>Username</p>
+            <input type="text" name="username" onfocus="this.placeholder=''" placeholder="Enter your username"/>
+            <p>Password</p>
+            <input type="password" name="password" onfocus="this.placeholder=''" placeholder="Enter your password"/>
+            
+            <input type="submit" name="submit" value="LOGIN"/>   
+            
+            <div class="sign-up">
+                Don't have an account?  
+            <a href="/signup">Sign Up</a></div>
+        </form>
+    </div>
+{% endblock %}

@@ -4,6 +4,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.contrib import auth
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
+from django.template.context_processors import csrf
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 import calendar
 from django.conf import settings
 import matplotlib
@@ -11,6 +18,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from moneymanagerapp.models import Data
 from moneymanagerapp.calander import Calendar
+from moneymanagerapp.forms import UserRegisterForm
 
 class CalendarView(generic.ListView):
     model = Data
@@ -40,7 +48,7 @@ class CalendarView(generic.ListView):
         plt.pie(x,labels=labels,autopct='%1.1f%%')
         plt.title("Expense", fontsize=20)
         plt.legend()
-        plt.savefig('/home/mscreation028/mscreation028.pythonanywhere.com/static/img/fig.png')
+        plt.savefig('moneymanagerapp/static/img/fig.png')
         plt.close()
 
         x=[get_cCash(data),get_cCard(data),get_cSalary(data),get_cOthers(data)]   
@@ -48,7 +56,7 @@ class CalendarView(generic.ListView):
         plt.pie(x,labels=labels,autopct='%1.1f%%')
         plt.title("Income", fontsize=20)
         plt.legend()
-        plt.savefig('/home/mscreation028/mscreation028.pythonanywhere.com/static/img/fig1.png')
+        plt.savefig('moneymanagerapp/static/img/fig1.png')
         plt.close()
 
         context['expense']=get_expense(data)
@@ -303,3 +311,43 @@ def edit_data_db(request):
     url+=request.GET['day']
     return HttpResponseRedirect(url)
 
+
+
+def login(request):
+    c = {}
+    c.update(csrf(request))
+    
+    return render(request,'login.html', c)
+
+def auth_view(request):
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    request.session['password']=password
+    
+    user = auth.authenticate(username=username,password=password)
+    if user is not None:
+        
+        auth.login(request, user)
+        return HttpResponseRedirect('/home')
+    else:
+        messages.add_message(request,messages.WARNING,'Invalid Login Details')
+        return render(request,'login.html')
+
+def signup(request):
+    if request.method=='POST':
+        form=UserRegisterForm(request.POST)       
+        if form.is_valid():     
+            form.save()    
+            messages.add_message(request,messages.SUCCESS, 'Profile details updated.')
+            return render(request,'login.html')
+    else:
+        form=UserRegisterForm()
+    return render(request,'signup.html',{'form':form})
+
+
+@login_required(login_url='/login')
+
+def logout_request(request):
+    logout(request)
+    messages.add_message(request,messages.SUCCESS, 'Logged-out Successfully')
+    return render(request,'login.html')

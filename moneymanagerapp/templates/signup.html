@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Calendar
+{% endblock %}
+{% load static %}
+{% block content %}
+    
+    <div class="login-box">
+        <h1>Sign Up</h1>
+        <form method="POST"> 
+            
+            {% csrf_token %}
+            <div class="sform">
+            {% for field in form %}
+                <p>{{ field.html_name}}</p>
+                {{ field }}
+                {% for error in field.errors %}
+                    <div class="warning">{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+            </div>            
+            <input type="submit" name="submit" value="SIGN UP"/>   
+            <div class="sign-up">
+                Already have account? <a href="/login">Login</a></div>
+        </form>
+    </div>
+{% endblock %}
