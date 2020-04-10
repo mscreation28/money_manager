@@ -39,11 +39,11 @@
             <div class="popup-head">
                 <!-- {{ request.GET.day }} -->
             <h2>Add Data</h2>
-            <a class="close" href="/?month={{add_date | date:'Y-m'}}">&times;</a>
+            <a class="close" href="/home/?month={{add_date | date:'Y-m'}}">&times;</a>
             </div>
             <div class="link">
-                <a href="/show_data?day={{add_date | date:'d'}}" class="link-left">Details</a>
-                <a href="/add_data_inc?day={{add_date | date:'d'}}" class="link-left">Income</a>
+                <a href="/show_data/?day={{add_date | date:'d'}}" class="link-left">Details</a>
+                <a href="/add_data_inc/?day={{add_date | date:'d'}}" class="link-left">Income</a>
                 <a href="" class="link-right active">Expense</a>
             </div>
             <div class="content">

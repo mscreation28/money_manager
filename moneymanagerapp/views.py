@@ -33,7 +33,7 @@ class CalendarView(generic.ListView):
         cmonth+=str(d.month)
         self.request.session['cmonth']=cmonth
 
-        cal = Calendar(d.year, d.month)
+        cal = Calendar(d.year, d.month ,self.request.user.id)
         html_cal = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(html_cal)
         context['today'] = datetime.today().month
@@ -41,7 +41,7 @@ class CalendarView(generic.ListView):
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
 
-        data=Data.objects.filter(day__month=d.month, day__year=d.year)
+        data=Data.objects.filter(day__month=d.month, day__year=d.year, user=self.request.user.id)
 
         x=[get_cFood(data),get_cEducation(data),get_cTransport(data),get_cOther(data)]   
         labels=["Food","Education","Transport","Other"]
@@ -64,6 +64,8 @@ class CalendarView(generic.ListView):
         context['expense']=get_expense(data)
         context['income']=get_income(data)
         context['available']=get_income(data)-get_expense(data)
+
+        # request.user.id=self.request.user.id
         
         return context
 
@@ -172,7 +174,9 @@ def go_to(request):
     return HttpResponseRedirect(url)
 
 def add_trans(request):
+    u = User.objects.get(id = request.user.id)
     data=Data()
+    data.user=u
     data.amount=request.POST['amount']
     data.notes=request.POST['note']
     data.day=request.POST['adate']
@@ -209,7 +213,7 @@ class AddView(generic.ListView):
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
 
-        data=Data.objects.filter(day__month=d.month, day__year=d.year)
+        data=Data.objects.filter(day__month=d.month, day__year=d.year, user=self.request.user.id)
         context['expense']=get_expense(data)
         context['income']=get_income(data)
         context['available']=get_income(data)-get_expense(data)
@@ -234,7 +238,7 @@ class Add1View(generic.ListView):
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
 
-        data=Data.objects.filter(day__month=d.month, day__year=d.year)
+        data=Data.objects.filter(day__month=d.month, day__year=d.year, user=self.request.user.id)
         context['expense']=get_expense(data)
         context['income']=get_income(data)
         context['available']=get_income(data)-get_expense(data)
@@ -253,10 +257,10 @@ class ShowView(generic.ListView):
         add_date=datetime(d.year,d.month,int(self.request.GET['day']))
         html_cal = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(html_cal)
-        context['data']=Data.objects.filter(day=add_date)
+        context['data']=Data.objects.filter(day=add_date , user=self.request.user.id)
         context['add_date'] = add_date
         
-        data=Data.objects.filter(day__month=d.month, day__year=d.year)
+        data=Data.objects.filter(day__month=d.month, day__year=d.year, user=self.request.user.id)
         context['expense']=get_expense(data)
         context['income']=get_income(data)
         context['available']=get_income(data)-get_expense(data)
@@ -265,7 +269,7 @@ class ShowView(generic.ListView):
 
 def delete_data(request):
     did=int(request.GET['id'])
-    instance = Data.objects.get(id=did)
+    instance = Data.objects.get(id=did,user=request.user.id)
     instance.delete()
     url="/show_data?day="
     url+=request.GET['day']
@@ -281,18 +285,18 @@ class EditView(generic.ListView):
         cal = Calendar(d.year, d.month)
 
         eid=int(self.request.GET['id'])
-        instance = Data.objects.get(id=eid)
+        instance = Data.objects.get(id=eid, user=self.request.user.id)
 
         add_date=datetime(d.year,d.month,int(self.request.GET['day']))
         html_cal = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(html_cal)
-        context['data']=Data.objects.filter(day=add_date)
+        context['data']=Data.objects.filter(day=add_date, user=self.request.user.id)
         context['flag']=1
         context['instance']=instance
         # print(instance)
         context['add_date'] = add_date
         
-        data=Data.objects.filter(day__month=d.month, day__year=d.year)
+        data=Data.objects.filter(day__month=d.month, day__year=d.year, user=self.request.user.id)
         context['expense']=get_expense(data)
         context['income']=get_income(data)
         context['available']=get_income(data)-get_expense(data)
@@ -301,7 +305,7 @@ class EditView(generic.ListView):
 
 def edit_data_db(request):
     did=int(request.GET['id'])
-    instance = Data.objects.get(id=did)
+    instance = Data.objects.get(id=did, user=request.user.id)
 
     instance.amount=request.POST['amount']
     instance.notes=request.POST['note']

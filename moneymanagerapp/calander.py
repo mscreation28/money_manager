@@ -4,9 +4,10 @@ from moneymanagerapp.models import Data
 
 
 class Calendar(HTMLCalendar):
-    def __init__(self, year=None, month=None):
+    def __init__(self, year=None, month=None, uid=None):
         self.year = year
         self.month = month
+        self.uid=uid
         super(Calendar, self).__init__()
 
     # formats a day as a td
@@ -36,7 +37,7 @@ class Calendar(HTMLCalendar):
             d+= f'<li></li>'
 
         if day != 0:
-            return f"<td><a href='show_data?day={day}'><span class='date'>{day}</span><ul>{d}</ul></a></td>"
+            return f"<td><a href='/show_data/?day={day}'><span class='date'>{day}</span><ul>{d}</ul></a></td>"
         return '<td></td>'
 
     # formats a week as a tr
@@ -51,7 +52,7 @@ class Calendar(HTMLCalendar):
     # filter events by year and month
     def formatmonth(self, withyear=True):
         # events = Event.objects.filter(start_time__year=self.year, start_time__month=self.month)
-        data = Data.objects.filter(day__year=self.year, day__month=self.month)
+        data = Data.objects.filter(day__year=self.year, day__month=self.month, user=self.uid)
         count=0
         count1=0
         for datas in data:
